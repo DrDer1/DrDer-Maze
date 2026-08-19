@@ -234,7 +234,7 @@ class DrDerMazeApp {
         this.loadStage(this.currentStage);
     }
 
-    // معالجة إدخال لوحة المفاتيح - الاتجاهات الصحيحة
+    // معالجة إدخال لوحة المفاتيح - تم عكس الاتجاهين الأفقيين
     handleKeyboardInput(event) {
         if (!this.isGameActive) {
             return;
@@ -251,11 +251,11 @@ class DrDerMazeApp {
                 break;
             case 'ArrowLeft':
                 event.preventDefault();
-                this.movePlayer(1, 0); // معكوس: يسار = يمين
+                this.movePlayer(1, 0); // كان يمين، الآن يسار
                 break;
             case 'ArrowRight':
                 event.preventDefault();
-                this.movePlayer(-1, 0); // معكوس: يمين = يسار
+                this.movePlayer(-1, 0); // كان يسار، الآن يمين
                 break;
         }
     }
@@ -281,7 +281,7 @@ class DrDerMazeApp {
         event.preventDefault();
     }
 
-    // معالجة نهاية اللمس - الاتجاهات الصحيحة
+    // معالجة نهاية اللمس - تم عكس الاتجاهين الأفقيين
     handleTouchEnd(event) {
         if (!this.isGameActive) {
             return;
@@ -300,9 +300,9 @@ class DrDerMazeApp {
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             // حركة أفقية
             if (deltaX > 0) {
-                this.movePlayer(-1, 0); // سحب لليمين = تحرك لليسار (معكوس)
+                this.movePlayer(-1, 0); // سحب لليمين = تحرك لليسار
             } else {
-                this.movePlayer(1, 0); // سحب لليسار = تحرك لليمين (معكوس)
+                this.movePlayer(1, 0); // سحب لليسار = تحرك لليمين
             }
         } else {
             // حركة رأسية
