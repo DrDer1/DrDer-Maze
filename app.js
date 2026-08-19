@@ -38,39 +38,27 @@ class DrDerMazeApp {
 
     // تهيئة التطبيق
     async initialize() {
-        // تحميل التقدم المحفوظ
         this.currentStage = await this.storageManager.loadProgress();
-        
-        // إضافة مستمعي الأحداث
         this.setupEventListeners();
-        
-        // إظهار شاشة البداية
         this.showStartScreen();
-        
-        // التحقق من دعم PWA والتثبيت
         this.setupPWAInstall();
-        
         console.log('DrDer-Maze initialized successfully');
     }
 
     // إعداد مستمعي الأحداث
     setupEventListeners() {
-        // زر بدء اللعب
         this.startButton.addEventListener('click', () => {
             this.startGame();
         });
         
-        // زر المرحلة التالية
         this.nextStageButton.addEventListener('click', () => {
             this.nextStage();
         });
         
-        // التحكم بلوحة المفاتيح
         document.addEventListener('keydown', (event) => {
             this.handleKeyboardInput(event);
         });
         
-        // التحكم باللمس
         this.mazeContainer.addEventListener('touchstart', (event) => {
             this.handleTouchStart(event);
         }, { passive: false });
@@ -83,14 +71,12 @@ class DrDerMazeApp {
             this.handleTouchEnd(event);
         }, { passive: false });
         
-        // منع التمرير على مستوى الصفحة
         document.addEventListener('touchmove', (event) => {
             if (this.isGameActive) {
                 event.preventDefault();
             }
         }, { passive: false });
         
-        // أزرار التثبيت
         if (this.installButton) {
             this.installButton.addEventListener('click', () => {
                 this.installApp();
@@ -110,7 +96,6 @@ class DrDerMazeApp {
         this.gameScreen.classList.remove('active');
         this.isGameActive = false;
         
-        // إظهار رسالة التثبيت إذا لزم الأمر
         if (!this.isInstalled) {
             setTimeout(() => {
                 this.showInstallPrompt();
@@ -123,51 +108,44 @@ class DrDerMazeApp {
         this.startScreen.classList.remove('active');
         this.gameScreen.classList.add('active');
         this.isGameActive = true;
-        
         this.loadStage(this.currentStage);
     }
 
     // تحميل مرحلة جديدة
     loadStage(stageNumber) {
-        // تحديث رقم المرحلة في الواجهة
         this.stageNumberElement.textContent = `المرحلة ${stageNumber}`;
-        
-        // توليد المتاهة
         this.currentMaze = this.mazeGenerator.generateMaze(stageNumber);
         
-        // تعيين مواقع اللاعب والهدف
-        this.playerPosition = { x: this.currentMaze.playerPosition.x, y: this.currentMaze.playerPosition.y };
-        this.targetPosition = { x: this.currentMaze.targetPosition.x, y: this.currentMaze.targetPosition.y };
+        this.playerPosition = { 
+            x: this.currentMaze.playerPosition.x, 
+            y: this.currentMaze.playerPosition.y 
+        };
+        this.targetPosition = { 
+            x: this.currentMaze.targetPosition.x, 
+            y: this.currentMaze.targetPosition.y 
+        };
         
-        // رسم المتاهة
         this.renderMaze();
-        
-        // إخفاء رسالة الفوز
         this.winMessage.classList.add('hidden');
-        
-        // حفظ التقدم
         this.storageManager.saveProgress(stageNumber);
     }
 
-    // رسم المتاهة في الواجهة
+    // رسم المتاهة
     renderMaze() {
         const maze = this.currentMaze.maze;
         const width = this.currentMaze.width;
         const height = this.currentMaze.height;
         
-        // حساب حجم الخلايا
         const containerWidth = this.mazeContainer.clientWidth;
         const containerHeight = this.mazeContainer.clientHeight;
         const maxMazeWidth = Math.min(containerWidth, containerHeight) - 20;
         const cellSize = Math.floor(maxMazeWidth / width);
         
-        // إنشاء شبكة المتاهة
         const mazeGrid = document.createElement('div');
         mazeGrid.className = 'maze-grid';
         mazeGrid.style.gridTemplateColumns = `repeat(${width}, ${cellSize}px)`;
         mazeGrid.style.gridTemplateRows = `repeat(${height}, ${cellSize}px)`;
         
-        // إنشاء خلايا المتاهة
         for (let y = 0; y < height; y++) {
             for (let x = 0; x < width; x++) {
                 const cell = document.createElement('div');
@@ -185,24 +163,20 @@ class DrDerMazeApp {
             }
         }
         
-        // تنظيف الحاوية وإضافة الشبكة الجديدة
         this.mazeContainer.innerHTML = '';
         this.mazeContainer.appendChild(mazeGrid);
         
-        // تحديث مواقع اللاعب والهدف
         this.updatePlayerPosition();
         this.updateTargetPosition();
     }
 
     // تحديث موقع اللاعب
     updatePlayerPosition() {
-        // إزالة اللاعب القديم
         const oldPlayer = this.mazeContainer.querySelector('.maze-player');
         if (oldPlayer) {
             oldPlayer.classList.remove('maze-player');
         }
         
-        // إضافة اللاعب الجديد
         const playerCell = this.getCellElement(this.playerPosition.x, this.playerPosition.y);
         if (playerCell) {
             playerCell.classList.add('maze-player');
@@ -211,13 +185,11 @@ class DrDerMazeApp {
 
     // تحديث موقع الهدف
     updateTargetPosition() {
-        // إزالة الهدف القديم
         const oldTarget = this.mazeContainer.querySelector('.maze-target');
         if (oldTarget) {
             oldTarget.classList.remove('maze-target');
         }
         
-        // إضافة الهدف الجديد
         const targetCell = this.getCellElement(this.targetPosition.x, this.targetPosition.y);
         if (targetCell) {
             targetCell.classList.add('maze-target');
@@ -238,13 +210,11 @@ class DrDerMazeApp {
         const newX = this.playerPosition.x + dx;
         const newY = this.playerPosition.y + dy;
         
-        // التحقق من إمكانية التحرك
         if (this.mazeGenerator.canMove(newX, newY)) {
             this.playerPosition.x = newX;
             this.playerPosition.y = newY;
             this.updatePlayerPosition();
             
-            // التحقق من الوصول للهدف
             if (this.mazeGenerator.isTarget(newX, newY)) {
                 this.completeStage();
             }
@@ -273,19 +243,19 @@ class DrDerMazeApp {
         switch (event.key) {
             case 'ArrowUp':
                 event.preventDefault();
-                this.movePlayer(0, -1); // أعلى (نقصان y)
+                this.movePlayer(0, -1);
                 break;
             case 'ArrowDown':
                 event.preventDefault();
-                this.movePlayer(0, 1); // أسفل (زيادة y)
+                this.movePlayer(0, 1);
                 break;
             case 'ArrowLeft':
                 event.preventDefault();
-                this.movePlayer(-1, 0); // يسار (نقصان x)
+                this.movePlayer(-1, 0);
                 break;
             case 'ArrowRight':
                 event.preventDefault();
-                this.movePlayer(1, 0); // يمين (زيادة x)
+                this.movePlayer(1, 0);
                 break;
         }
     }
@@ -323,34 +293,32 @@ class DrDerMazeApp {
         const deltaX = touch.clientX - this.touchStartX;
         const deltaY = touch.clientY - this.touchStartY;
         
-        // التحقق من أن الحركة تجاوزت الحد الأدنى
         if (Math.abs(deltaX) < this.touchThreshold && Math.abs(deltaY) < this.touchThreshold) {
             return;
         }
         
-        // تحديد اتجاه الحركة
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             // حركة أفقية
             if (deltaX > 0) {
-                // السحب من اليسار إلى اليمين = تحرك لليمين (زيادة x)
+                // سحب لليمين = تحرك لليمين
                 this.movePlayer(1, 0);
             } else {
-                // السحب من اليمين إلى اليسار = تحرك لليسار (نقصان x)
+                // سحب لليسار = تحرك لليسار
                 this.movePlayer(-1, 0);
             }
         } else {
             // حركة رأسية
             if (deltaY > 0) {
-                // السحب من الأعلى إلى الأسفل = تحرك للأسفل (زيادة y)
+                // سحب للأسفل = تحرك للأسفل
                 this.movePlayer(0, 1);
             } else {
-                // السحب من الأسفل إلى الأعلى = تحرك للأعلى (نقصان y)
+                // سحب للأعلى = تحرك للأعلى
                 this.movePlayer(0, -1);
             }
         }
     }
 
-    // إعداد دعم PWA للتثبيت
+    // إعداد دعم PWA
     setupPWAInstall() {
         window.addEventListener('beforeinstallprompt', (event) => {
             event.preventDefault();
@@ -362,17 +330,15 @@ class DrDerMazeApp {
         });
         
         window.addEventListener('appinstalled', () => {
-            console.log('DrDer-Maze installed successfully');
             this.isInstalled = true;
             this.hideInstallPrompt();
         });
     }
 
-    // التحقق مما إذا كان التطبيق مثبتاً
+    // التحقق من التثبيت
     checkIfInstalled() {
         const displayMode = window.matchMedia('(display-mode: standalone)').matches;
         const standaloneMode = window.navigator.standalone === true;
-        
         return displayMode || standaloneMode;
     }
 
@@ -396,10 +362,7 @@ class DrDerMazeApp {
                 const result = await this.deferredPrompt.userChoice;
                 
                 if (result.outcome === 'accepted') {
-                    console.log('User accepted installation');
                     this.isInstalled = true;
-                } else {
-                    console.log('User dismissed installation');
                 }
                 
                 this.deferredPrompt = null;
@@ -412,7 +375,7 @@ class DrDerMazeApp {
     }
 }
 
-// تهيئة التطبيق عند تحميل الصفحة
+// تهيئة التطبيق
 document.addEventListener('DOMContentLoaded', () => {
     const app = new DrDerMazeApp();
     window.drDerMazeApp = app;
