@@ -1,6 +1,5 @@
 /* ===== DrDer-Maze - Main Styles ===== */
 
-/* ===== CSS Variables ===== */
 :root {
     --bg-primary: #1a1a2e;
     --bg-secondary: #16213e;
@@ -10,19 +9,15 @@
     --gold-primary: #f4c430;
     --gold-secondary: #ffd700;
     --gold-dark: #c9a227;
-    --wall-color: #0a0a0a;
-    --path-color: #1a1a1a;
-    --border-line: #2a2a2a;
+    --wall-color: #2c3e50;
+    --path-color: #ecf0f1;
     --player-color: #ffd700;
-    --target-color: #ff4444;
+    --target-color: #e74c3c;
     --border-color: #3a3a5c;
     --shadow-color: rgba(0, 0, 0, 0.3);
-    --success-color: #4caf50;
-    --error-color: #f44336;
     --transition-speed: 0.3s;
 }
 
-/* ===== Global Styles ===== */
 * {
     margin: 0;
     padding: 0;
@@ -52,7 +47,6 @@ body {
     justify-content: center;
 }
 
-/* ===== Screen Management ===== */
 .screen {
     display: none;
     width: 100%;
@@ -74,7 +68,6 @@ body {
     display: none !important;
 }
 
-/* ===== Start Screen ===== */
 #startScreen {
     background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
 }
@@ -106,16 +99,6 @@ body {
     height: 120px;
     border-radius: 20px;
     box-shadow: 0 8px 32px rgba(244, 196, 48, 0.3);
-    animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.05);
-    }
 }
 
 .game-title {
@@ -123,16 +106,13 @@ body {
     font-weight: bold;
     color: var(--gold-primary);
     text-shadow: 0 2px 10px rgba(244, 196, 48, 0.5);
-    letter-spacing: 2px;
 }
 
 .game-description {
     font-size: 1.1rem;
     color: var(--text-secondary);
-    margin-top: -10px;
 }
 
-/* ===== Buttons ===== */
 .btn {
     padding: 14px 32px;
     border: none;
@@ -144,7 +124,6 @@ body {
     outline: none;
     min-width: 160px;
     text-align: center;
-    letter-spacing: 1px;
 }
 
 .btn:active {
@@ -157,17 +136,6 @@ body {
     box-shadow: 0 4px 16px rgba(244, 196, 48, 0.4);
 }
 
-.btn-primary:hover {
-    background-color: var(--gold-secondary);
-    box-shadow: 0 6px 20px rgba(244, 196, 48, 0.6);
-    transform: translateY(-2px);
-}
-
-.btn-primary:active {
-    transform: scale(0.95);
-}
-
-/* ===== Game Screen ===== */
 #gameScreen {
     background-color: var(--bg-primary);
     flex-direction: column;
@@ -190,7 +158,6 @@ body {
     font-size: 1.1rem;
     font-weight: bold;
     color: var(--gold-primary);
-    letter-spacing: 1px;
 }
 
 .stage-number {
@@ -209,91 +176,57 @@ body {
     overflow: hidden;
 }
 
-/* ===== Maze Container ===== */
 .maze-container {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 100%;
     height: 100%;
-    position: relative;
 }
 
 .maze-grid {
     display: grid;
-    gap: 1px;
-    background-color: var(--border-line);
-    border: 2px solid var(--gold-dark);
+    gap: 0;
+    background-color: var(--wall-color);
+    border: 3px solid var(--gold-dark);
     border-radius: 4px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     max-width: 100%;
     max-height: 100%;
     aspect-ratio: 1 / 1;
     touch-action: none;
-    padding: 1px;
 }
 
-/* ===== Maze Cells ===== */
 .maze-cell {
     width: 100%;
     height: 100%;
     min-width: 0;
     min-height: 0;
-    transition: background-color 0.1s ease;
-    border-radius: 1px;
 }
 
 .maze-wall {
     background-color: var(--wall-color);
-    border: 1px solid #1a1a1a;
 }
 
 .maze-path {
     background-color: var(--path-color);
-    border: 1px solid #2a2a2a;
 }
 
 .maze-player {
     background-color: var(--player-color);
     border-radius: 50%;
     box-shadow: 0 0 12px rgba(255, 215, 0, 0.9);
-    animation: playerGlow 1s ease-in-out infinite;
     position: relative;
     z-index: 5;
-    border: none;
-}
-
-@keyframes playerGlow {
-    0%, 100% {
-        box-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
-    }
-    50% {
-        box-shadow: 0 0 20px rgba(255, 215, 0, 1);
-    }
 }
 
 .maze-target {
     background-color: var(--target-color);
     border-radius: 50%;
-    box-shadow: 0 0 15px rgba(255, 68, 68, 0.9);
-    animation: targetPulse 1.5s ease-in-out infinite;
+    box-shadow: 0 0 15px rgba(231, 76, 60, 0.9);
     position: relative;
     z-index: 4;
-    border: none;
 }
 
-@keyframes targetPulse {
-    0%, 100% {
-        background-color: var(--target-color);
-        box-shadow: 0 0 10px rgba(255, 68, 68, 0.7);
-    }
-    50% {
-        background-color: #ff6666;
-        box-shadow: 0 0 25px rgba(255, 68, 68, 1);
-    }
-}
-
-/* ===== Win Message ===== */
 .win-message {
     position: fixed;
     top: 50%;
@@ -304,18 +237,6 @@ body {
     border-radius: 12px;
     padding: 32px;
     z-index: 100;
-    animation: winAnimation 0.5s ease-in-out;
-}
-
-@keyframes winAnimation {
-    from {
-        opacity: 0;
-        transform: translate(-50%, -50%) scale(0.8);
-    }
-    to {
-        opacity: 1;
-        transform: translate(-50%, -50%) scale(1);
-    }
 }
 
 .win-content {
@@ -323,7 +244,6 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 20px;
-    text-align: center;
 }
 
 .win-content h2 {
@@ -331,7 +251,6 @@ body {
     color: var(--gold-primary);
 }
 
-/* ===== Install Prompt ===== */
 .install-prompt {
     position: fixed;
     bottom: 20px;
@@ -344,19 +263,6 @@ body {
     border-radius: 12px;
     padding: 16px;
     z-index: 200;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-    animation: slideUp 0.4s ease-in-out;
-}
-
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateX(-50%) translateY(100%);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(-50%) translateY(0);
-    }
 }
 
 .install-content {
@@ -374,7 +280,6 @@ body {
 
 .install-text {
     flex: 1;
-    min-width: 0;
 }
 
 .install-text h3 {
@@ -392,7 +297,6 @@ body {
 .install-buttons {
     display: flex;
     gap: 8px;
-    flex-shrink: 0;
 }
 
 .btn-install {
@@ -412,7 +316,6 @@ body {
     border: 1px solid var(--border-color);
 }
 
-/* ===== Responsive Design ===== */
 @media (max-width: 768px) {
     .game-title {
         font-size: 2rem;
@@ -427,10 +330,6 @@ body {
         font-size: 1rem;
     }
     
-    .stage-number {
-        font-size: 0.8rem;
-    }
-    
     .btn {
         padding: 12px 24px;
         font-size: 1rem;
@@ -439,10 +338,6 @@ body {
     
     .game-area {
         padding: 4px;
-    }
-    
-    .maze-grid {
-        gap: 1px;
     }
 }
 
@@ -456,74 +351,14 @@ body {
         height: 80px;
     }
     
-    .game-title-small {
-        font-size: 0.9rem;
-    }
-    
     .game-area {
         padding: 2px;
     }
-    
-    .install-prompt {
-        width: 95%;
-        bottom: 10px;
-    }
-    
-    .maze-grid {
-        gap: 1px;
-    }
 }
 
-/* ===== Touch Handling ===== */
 .maze-container {
     touch-action: none;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     user-select: none;
-}
-
-/* ===== Landscape Orientation Support ===== */
-@media (orientation: landscape) and (max-height: 500px) {
-    .game-header {
-        padding: 6px 10px;
-    }
-    
-    .game-title-small {
-        font-size: 0.8rem;
-    }
-    
-    .stage-number {
-        font-size: 0.7rem;
-    }
-    
-    .game-area {
-        padding: 2px;
-    }
-    
-    .start-container {
-        gap: 12px;
-    }
-    
-    .start-logo {
-        width: 60px;
-        height: 60px;
-    }
-    
-    .game-title {
-        font-size: 1.5rem;
-    }
-    
-    .game-description {
-        font-size: 0.9rem;
-    }
-    
-    .btn {
-        padding: 8px 16px;
-        font-size: 0.9rem;
-        min-width: 120px;
-    }
-    
-    .maze-grid {
-        gap: 1px;
-    }
 }
