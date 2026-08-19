@@ -1,0 +1,506 @@
+/* ===== DrDer-Maze - Main Styles ===== */
+
+/* ===== CSS Variables ===== */
+:root {
+    --bg-primary: #1a1a2e;
+    --bg-secondary: #16213e;
+    --bg-tertiary: #0f3460;
+    --text-primary: #ffffff;
+    --text-secondary: #e0e0e0;
+    --gold-primary: #f4c430;
+    --gold-secondary: #ffd700;
+    --gold-dark: #c9a227;
+    --wall-color: #2c3e50;
+    --path-color: #34495e;
+    --player-color: #ffd700;
+    --target-color: #f4c430;
+    --border-color: #3a3a5c;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --success-color: #4caf50;
+    --error-color: #f44336;
+    --transition-speed: 0.3s;
+}
+
+/* ===== Global Styles ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    font-family: 'Segoe UI', Tahoma, 'Arial', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    direction: rtl;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: none;
+}
+
+body {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* ===== Screen Management ===== */
+.screen {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg-primary);
+}
+
+.screen.active {
+    display: flex;
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ===== Start Screen ===== */
+#startScreen {
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--bg-tertiary) 100%);
+}
+
+.start-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    padding: 20px;
+    text-align: center;
+    animation: fadeIn 0.8s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.start-logo {
+    width: 120px;
+    height: 120px;
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(244, 196, 48, 0.3);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+.game-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: var(--gold-primary);
+    text-shadow: 0 2px 10px rgba(244, 196, 48, 0.5);
+    letter-spacing: 2px;
+}
+
+.game-description {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    margin-top: -10px;
+}
+
+/* ===== Buttons ===== */
+.btn {
+    padding: 14px 32px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    outline: none;
+    min-width: 160px;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.btn:active {
+    transform: scale(0.95);
+}
+
+.btn-primary {
+    background-color: var(--gold-primary);
+    color: #1a1a2e;
+    box-shadow: 0 4px 16px rgba(244, 196, 48, 0.4);
+}
+
+.btn-primary:hover {
+    background-color: var(--gold-secondary);
+    box-shadow: 0 6px 20px rgba(244, 196, 48, 0.6);
+    transform: translateY(-2px);
+}
+
+.btn-primary:active {
+    transform: scale(0.95);
+}
+
+/* ===== Game Screen ===== */
+#gameScreen {
+    background-color: var(--bg-primary);
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.game-header {
+    width: 100%;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--bg-secondary);
+    border-bottom: 2px solid var(--gold-dark);
+    z-index: 10;
+    flex-shrink: 0;
+}
+
+.game-title-small {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: var(--gold-primary);
+    letter-spacing: 1px;
+}
+
+.stage-number {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    font-weight: bold;
+}
+
+.game-area {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    overflow: hidden;
+}
+
+/* ===== Maze Container ===== */
+.maze-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.maze-grid {
+    display: grid;
+    gap: 0;
+    background-color: var(--wall-color);
+    border: 3px solid var(--gold-dark);
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    max-width: 100%;
+    max-height: 100%;
+    aspect-ratio: 1 / 1;
+    touch-action: none;
+}
+
+/* ===== Maze Cells ===== */
+.maze-cell {
+    width: 100%;
+    height: 100%;
+    min-width: 0;
+    min-height: 0;
+    transition: background-color 0.1s ease;
+}
+
+.maze-wall {
+    background-color: var(--wall-color);
+}
+
+.maze-path {
+    background-color: var(--path-color);
+}
+
+.maze-player {
+    background-color: var(--player-color);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    animation: playerGlow 1.5s ease-in-out infinite;
+}
+
+@keyframes playerGlow {
+    0%, 100% {
+        box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+    }
+    50% {
+        box-shadow: 0 0 16px rgba(255, 215, 0, 1);
+    }
+}
+
+.maze-target {
+    background-color: var(--target-color);
+    border-radius: 2px;
+    box-shadow: 0 0 12px rgba(244, 196, 48, 0.9);
+    animation: targetPulse 2s ease-in-out infinite;
+}
+
+@keyframes targetPulse {
+    0%, 100% {
+        background-color: var(--target-color);
+        box-shadow: 0 0 8px rgba(244, 196, 48, 0.7);
+    }
+    50% {
+        background-color: var(--gold-secondary);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 1);
+    }
+}
+
+/* ===== Win Message ===== */
+.win-message {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.85);
+    border: 2px solid var(--gold-primary);
+    border-radius: 12px;
+    padding: 32px;
+    z-index: 100;
+    animation: winAnimation 0.5s ease-in-out;
+}
+
+@keyframes winAnimation {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.8);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+.win-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    text-align: center;
+}
+
+.win-content h2 {
+    font-size: 2rem;
+    color: var(--gold-primary);
+}
+
+/* ===== Install Prompt ===== */
+.install-prompt {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 90%;
+    max-width: 400px;
+    background-color: var(--bg-secondary);
+    border: 2px solid var(--gold-dark);
+    border-radius: 12px;
+    padding: 16px;
+    z-index: 200;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    animation: slideUp 0.4s ease-in-out;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+.install-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.install-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+}
+
+.install-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.install-text h3 {
+    font-size: 1rem;
+    color: var(--gold-primary);
+    margin-bottom: 4px;
+}
+
+.install-text p {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+.install-buttons {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.btn-install {
+    background-color: var(--gold-primary);
+    color: #1a1a2e;
+    padding: 8px 16px;
+    min-width: auto;
+    font-size: 0.9rem;
+}
+
+.btn-dismiss {
+    background-color: transparent;
+    color: var(--text-secondary);
+    padding: 8px 16px;
+    min-width: auto;
+    font-size: 0.9rem;
+    border: 1px solid var(--border-color);
+}
+
+/* ===== Responsive Design ===== */
+@media (max-width: 768px) {
+    .game-title {
+        font-size: 2rem;
+    }
+    
+    .start-logo {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .game-title-small {
+        font-size: 1.1rem;
+    }
+    
+    .stage-number {
+        font-size: 0.9rem;
+    }
+    
+    .btn {
+        padding: 12px 24px;
+        font-size: 1rem;
+        min-width: 140px;
+    }
+    
+    .game-area {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .game-title {
+        font-size: 1.8rem;
+    }
+    
+    .start-logo {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .game-title-small {
+        font-size: 1rem;
+    }
+    
+    .game-area {
+        padding: 4px;
+    }
+    
+    .install-prompt {
+        width: 95%;
+        bottom: 10px;
+    }
+}
+
+/* ===== Touch Handling ===== */
+.maze-container {
+    touch-action: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* ===== Landscape Orientation Support ===== */
+@media (orientation: landscape) and (max-height: 500px) {
+    .game-header {
+        padding: 8px 12px;
+    }
+    
+    .game-title-small {
+        font-size: 0.9rem;
+    }
+    
+    .stage-number {
+        font-size: 0.8rem;
+    }
+    
+    .game-area {
+        padding: 4px;
+    }
+    
+    .start-container {
+        gap: 12px;
+    }
+    
+    .start-logo {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .game-title {
+        font-size: 1.5rem;
+    }
+    
+    .game-description {
+        font-size: 0.9rem;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+        min-width: 120px;
+    }
+}
