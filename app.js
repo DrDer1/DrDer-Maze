@@ -300,9 +300,9 @@ class DrDerMazeApp {
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             // حركة أفقية - معكوسة
             if (deltaX > 0) {
-                this.movePlayer(-1, 0); // سحب يمين = تحرك يسار
+                this.movePlayer(1, 0); // سحب يمين = تحرك يسار
             } else {
-                this.movePlayer(1, 0); // سحب يسار = تحرك يمين
+                this.movePlayer(-1, 0); // سحب يسار = تحرك يمين
             }
         } else {
             // حركة رأسية
