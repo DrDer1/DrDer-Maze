@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#1a1a2e">
+    <meta name="description" content="DrDer-Maze - آلاف المتاهات بانتظارك">
+    
+    <title>DrDer-Maze</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- App Icons -->
+    <link rel="icon" type="image/png" sizes="192x192" href="192.png">
+    <link rel="apple-touch-icon" href="192.png">
+    
+    <!-- Apple PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="DrDer-Maze">
+    
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- شاشة البداية -->
+    <div id="startScreen" class="screen active">
+        <div class="start-container">
+            <img src="192.png" alt="DrDer-Maze Logo" class="start-logo" width="120" height="120">
+            <h1 class="game-title">DrDer-Maze</h1>
+            <p class="game-description">آلاف المتاهات بانتظارك</p>
+            <button id="startButton" class="btn btn-primary">ابدأ اللعب</button>
+        </div>
+    </div>
+
+    <!-- شاشة اللعب -->
+    <div id="gameScreen" class="screen">
+        <header class="game-header">
+            <h1 class="game-title-small">DrDer-Maze</h1>
+            <p id="stageNumber" class="stage-number">المرحلة 1</p>
+        </header>
+        
+        <main class="game-area">
+            <div id="mazeContainer" class="maze-container">
+                <!-- سيتم إنشاء المتاهة هنا بواسطة JavaScript -->
+            </div>
+        </main>
+        
+        <!-- رسالة الفوز -->
+        <div id="winMessage" class="win-message hidden">
+            <div class="win-content">
+                <h2>أحسنت!</h2>
+                <button id="nextStageButton" class="btn btn-primary">المرحلة التالية</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- رسالة تثبيت التطبيق -->
+    <div id="installPrompt" class="install-prompt hidden">
+        <div class="install-content">
+            <img src="192.png" alt="DrDer-Maze" class="install-icon" width="48" height="48">
+            <div class="install-text">
+                <h3>ثبّت DrDer-Maze</h3>
+                <p>العب بدون إنترنت وتجربة أفضل</p>
+            </div>
+            <div class="install-buttons">
+                <button id="installButton" class="btn btn-install">تثبيت اللعبة</button>
+                <button id="dismissInstall" class="btn btn-dismiss">لاحقًا</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="maze.js"></script>
+    <script src="storage.js"></script>
+    <script src="app.js"></script>
+    
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('sw.js').then(function(registration) {
+                    console.log('Service Worker registered with scope:', registration.scope);
+                }).catch(function(error) {
+                    console.log('Service Worker registration failed:', error);
+                });
+            });
+        }
+    </script>
+</body>
+</html>
