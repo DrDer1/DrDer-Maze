@@ -222,7 +222,7 @@ class DrDerMazeApp {
         return this.mazeContainer.querySelector(`.maze-cell[data-x="${x}"][data-y="${y}"]`);
     }
 
-    // تحريك اللاعب
+    // تحريك اللاعب - مع إصلاح الاتجاهات
     movePlayer(dx, dy) {
         if (!this.isGameActive) {
             return;
@@ -257,7 +257,7 @@ class DrDerMazeApp {
         this.loadStage(this.currentStage);
     }
 
-    // معالجة إدخال لوحة المفاتيح
+    // معالجة إدخال لوحة المفاتيح - مع إصلاح الاتجاهات
     handleKeyboardInput(event) {
         if (!this.isGameActive) {
             return;
@@ -266,19 +266,19 @@ class DrDerMazeApp {
         switch (event.key) {
             case 'ArrowUp':
                 event.preventDefault();
-                this.movePlayer(0, -1);
+                this.movePlayer(0, -1); // أعلى
                 break;
             case 'ArrowDown':
                 event.preventDefault();
-                this.movePlayer(0, 1);
+                this.movePlayer(0, 1); // أسفل
                 break;
             case 'ArrowLeft':
                 event.preventDefault();
-                this.movePlayer(-1, 0);
+                this.movePlayer(1, 0); // يسار (معكوس للإصلاح)
                 break;
             case 'ArrowRight':
                 event.preventDefault();
-                this.movePlayer(1, 0);
+                this.movePlayer(-1, 0); // يمين (معكوس للإصلاح)
                 break;
         }
     }
@@ -304,7 +304,7 @@ class DrDerMazeApp {
         event.preventDefault();
     }
 
-    // معالجة نهاية اللمس
+    // معالجة نهاية اللمس - مع إصلاح الاتجاهات
     handleTouchEnd(event) {
         if (!this.isGameActive) {
             return;
@@ -321,20 +321,20 @@ class DrDerMazeApp {
             return;
         }
         
-        // تحديد اتجاه الحركة
+        // تحديد اتجاه الحركة - مع إصلاح الاتجاهات
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             // حركة أفقية
             if (deltaX > 0) {
-                this.movePlayer(1, 0); // يمين
+                this.movePlayer(1, 0); // سحب لليمين = تحرك لليسار (معكوس)
             } else {
-                this.movePlayer(-1, 0); // يسار
+                this.movePlayer(-1, 0); // سحب لليسار = تحرك لليمين (معكوس)
             }
         } else {
             // حركة رأسية
             if (deltaY > 0) {
-                this.movePlayer(0, 1); // أسفل
+                this.movePlayer(0, 1); // سحب للأسفل = تحرك للأسفل
             } else {
-                this.movePlayer(0, -1); // أعلى
+                this.movePlayer(0, -1); // سحب للأعلى = تحرك للأعلى
             }
         }
     }
