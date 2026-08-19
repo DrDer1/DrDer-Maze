@@ -136,8 +136,8 @@ class DrDerMazeApp {
         this.currentMaze = this.mazeGenerator.generateMaze(stageNumber);
         
         // تعيين مواقع اللاعب والهدف
-        this.playerPosition = this.currentMaze.playerPosition;
-        this.targetPosition = this.currentMaze.targetPosition;
+        this.playerPosition = { x: this.currentMaze.playerPosition.x, y: this.currentMaze.playerPosition.y };
+        this.targetPosition = { x: this.currentMaze.targetPosition.x, y: this.currentMaze.targetPosition.y };
         
         // رسم المتاهة
         this.renderMaze();
@@ -211,6 +211,13 @@ class DrDerMazeApp {
 
     // تحديث موقع الهدف
     updateTargetPosition() {
+        // إزالة الهدف القديم
+        const oldTarget = this.mazeContainer.querySelector('.maze-target');
+        if (oldTarget) {
+            oldTarget.classList.remove('maze-target');
+        }
+        
+        // إضافة الهدف الجديد
         const targetCell = this.getCellElement(this.targetPosition.x, this.targetPosition.y);
         if (targetCell) {
             targetCell.classList.add('maze-target');
@@ -266,19 +273,19 @@ class DrDerMazeApp {
         switch (event.key) {
             case 'ArrowUp':
                 event.preventDefault();
-                this.movePlayer(0, -1); // أعلى
+                this.movePlayer(0, -1); // أعلى (نقصان y)
                 break;
             case 'ArrowDown':
                 event.preventDefault();
-                this.movePlayer(0, 1); // أسفل
+                this.movePlayer(0, 1); // أسفل (زيادة y)
                 break;
             case 'ArrowLeft':
                 event.preventDefault();
-                this.movePlayer(-1, 0); // يسار
+                this.movePlayer(-1, 0); // يسار (نقصان x)
                 break;
             case 'ArrowRight':
                 event.preventDefault();
-                this.movePlayer(1, 0); // يمين
+                this.movePlayer(1, 0); // يمين (زيادة x)
                 break;
         }
     }
@@ -325,19 +332,19 @@ class DrDerMazeApp {
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             // حركة أفقية
             if (deltaX > 0) {
-                // السحب من اليسار إلى اليمين = تحرك لليمين
+                // السحب من اليسار إلى اليمين = تحرك لليمين (زيادة x)
                 this.movePlayer(1, 0);
             } else {
-                // السحب من اليمين إلى اليسار = تحرك لليسار
+                // السحب من اليمين إلى اليسار = تحرك لليسار (نقصان x)
                 this.movePlayer(-1, 0);
             }
         } else {
             // حركة رأسية
             if (deltaY > 0) {
-                // السحب من الأعلى إلى الأسفل = تحرك للأسفل
+                // السحب من الأعلى إلى الأسفل = تحرك للأسفل (زيادة y)
                 this.movePlayer(0, 1);
             } else {
-                // السحب من الأسفل إلى الأعلى = تحرك للأعلى
+                // السحب من الأسفل إلى الأعلى = تحرك للأعلى (نقصان y)
                 this.movePlayer(0, -1);
             }
         }
