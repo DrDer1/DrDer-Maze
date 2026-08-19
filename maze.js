@@ -68,10 +68,10 @@ class MazeGenerator {
         // استخدام خوارزمية Recursive Backtracking
         this.carvePassages(startX, startY, random);
         
-        // إزالة بعض الجدران لإنشاء طرق بديلة (10% فقط)
+        // إزالة بعض الجدران لإنشاء طرق بديلة (5% فقط)
         this.removeSomeWalls(random);
         
-        // إضافة تفرعات
+        // إضافة تفرعات محدودة
         this.addBranches(random);
         
         this.playerPosition = { x: 1, y: 1 };
@@ -110,10 +110,10 @@ class MazeGenerator {
         }
     }
 
-    // إزالة بعض الجدران (10% فقط)
+    // إزالة بعض الجدران (5% فقط)
     removeSomeWalls(random) {
         const totalCells = this.width * this.height;
-        const wallsToRemove = Math.floor(totalCells * 0.1);
+        const wallsToRemove = Math.floor(totalCells * 0.05);
         
         for (let i = 0; i < wallsToRemove; i++) {
             const x = Math.floor(random() * (this.width - 2)) + 1;
@@ -129,7 +129,7 @@ class MazeGenerator {
                     }
                 }
                 
-                // إزالة الجدار إذا كان محاطاً بممرين
+                // إزالة الجدار فقط إذا كان محاطاً بممرين بالضبط
                 if (pathCount === 2) {
                     this.maze[y][x] = 0;
                 }
@@ -137,9 +137,9 @@ class MazeGenerator {
         }
     }
 
-    // إضافة تفرعات
+    // إضافة تفرعات محدودة
     addBranches(random) {
-        const branches = Math.floor(this.width * 0.8);
+        const branches = Math.floor(this.width * 0.5);
         
         for (let i = 0; i < branches; i++) {
             let attempts = 0;
@@ -179,6 +179,7 @@ class MazeGenerator {
                 }
             }
             
+            // فتح الجدار فقط إذا كان محاطاً بممر واحد
             if (pathCount === 1) {
                 this.maze[newY][newX] = 0;
             }
