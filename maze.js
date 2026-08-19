@@ -1,4 +1,4 @@
-// ===== DrDer-Maze - Maze Generator (Fixed Structure - Clear Walls) =====
+// ===== DrDer-Maze - Maze Generator =====
 
 class MazeGenerator {
     constructor() {
@@ -23,19 +23,17 @@ class MazeGenerator {
         let size;
         
         if (stageNumber <= 5) {
-            size = 17;
+            size = 15;
         } else if (stageNumber <= 15) {
-            size = 23;
+            size = 21;
         } else if (stageNumber <= 30) {
-            size = 29;
+            size = 27;
         } else if (stageNumber <= 60) {
-            size = 35;
+            size = 33;
         } else if (stageNumber <= 100) {
-            size = 41;
-        } else if (stageNumber <= 200) {
-            size = 47;
+            size = 39;
         } else {
-            size = 53;
+            size = 45;
         }
         
         if (size % 2 === 0) {
@@ -45,7 +43,7 @@ class MazeGenerator {
         return size;
     }
 
-    // توليد المتاهة بخوارزمية تحافظ على الجدران
+    // توليد المتاهة
     generateMaze(stageNumber) {
         const size = this.getMazeSize(stageNumber);
         this.width = size;
@@ -67,17 +65,17 @@ class MazeGenerator {
         const startY = 1;
         this.maze[startY][startX] = 0; // 0 = ممر
         
-        // استخدام خوارزمية Recursive Backtracking القياسية
+        // استخدام خوارزمية Recursive Backtracking
         this.carvePassages(startX, startY, random);
         
-        // إزالة جدران قليلة جداً (5% فقط) لإنشاء بعض الطرق البديلة
-        this.removeFewWalls(random);
+        // إزالة بعض الجدران لإنشاء طرق بديلة (10% فقط)
+        this.removeSomeWalls(random);
         
-        // إضافة بعض التفرعات المحدودة
-        this.addLimitedBranches(random);
+        // إضافة تفرعات
+        this.addBranches(random);
         
         this.playerPosition = { x: 1, y: 1 };
-        this.targetPosition = this.findFarthestTarget(random);
+        this.targetPosition = this.findTarget(random);
         
         return {
             maze: this.maze,
@@ -89,16 +87,15 @@ class MazeGenerator {
         };
     }
 
-    // خوارزمية Recursive Backtracking قياسية
+    // خوارزمية Recursive Backtracking
     carvePassages(x, y, random) {
         const directions = [
-            { dx: 0, dy: -2 }, // أعلى
-            { dx: 0, dy: 2 },  // أسفل
-            { dx: -2, dy: 0 }, // يسار
-            { dx: 2, dy: 0 }   // يمين
+            { dx: 0, dy: -2 },
+            { dx: 0, dy: 2 },
+            { dx: -2, dy: 0 },
+            { dx: 2, dy: 0 }
         ];
         
-        // خلط الاتجاهات
         this.shuffleArray(directions, random);
         
         for (const dir of directions) {
@@ -106,38 +103,17 @@ class MazeGenerator {
             const newY = y + dir.dy;
             
             if (this.isValidCell(newX, newY) && this.maze[newY][newX] === 1) {
-                // التحقق من أن الخلية الجديدة لا تخلق مساحة مفتوحة
-                if (this.isSafeToCarve(newX, newY)) {
-                    // حفر الممر
-                    this.maze[newY][newX] = 0;
-                    // حفر الخلية بين الموقعين
-                    this.maze[y + dir.dy / 2][x + dir.dx / 2] = 0;
-                    // الاستمرار بشكل تكراري
-                    this.carvePassages(newX, newY, random);
-                }
+                this.maze[newY][newX] = 0;
+                this.maze[y + dir.dy / 2][x + dir.dx / 2] = 0;
+                this.carvePassages(newX, newY, random);
             }
         }
     }
 
-    // التحقق من أن الحفر آمن ولا يخلق مساحة مفتوحة
-    isSafeToCarve(x, y) {
-        const neighbors = this.getNeighbors(x, y);
-        let pathCount = 0;
-        
-        for (const neighbor of neighbors) {
-            if (this.maze[neighbor.y][neighbor.x] === 0) {
-                pathCount++;
-            }
-        }
-        
-        // السماح بالحفر فقط إذا كان هناك ممر واحد مجاور أو أقل
-        return pathCount <= 1;
-    }
-
-    // إزالة عدد قليل جداً من الجدران (5% فقط)
-    removeFewWalls(random) {
+    // إزالة بعض الجدران (10% فقط)
+    removeSomeWalls(random) {
         const totalCells = this.width * this.height;
-        const wallsToRemove = Math.floor(totalCells * 0.05);
+        const wallsToRemove = Math.floor(totalCells * 0.1);
         
         for (let i = 0; i < wallsToRemove; i++) {
             const x = Math.floor(random() * (this.width - 2)) + 1;
@@ -153,7 +129,7 @@ class MazeGenerator {
                     }
                 }
                 
-                // إزالة الجدار فقط إذا كان محاطاً بممرين بالضبط
+                // إزالة الجدار إذا كان محاطاً بممرين
                 if (pathCount === 2) {
                     this.maze[y][x] = 0;
                 }
@@ -161,9 +137,9 @@ class MazeGenerator {
         }
     }
 
-    // إضافة تفرعات محدودة
-    addLimitedBranches(random) {
-        const branches = Math.floor(this.width * 0.5);
+    // إضافة تفرعات
+    addBranches(random) {
+        const branches = Math.floor(this.width * 0.8);
         
         for (let i = 0; i < branches; i++) {
             let attempts = 0;
@@ -172,7 +148,7 @@ class MazeGenerator {
                 const y = Math.floor(random() * (this.height - 4)) + 2;
                 
                 if (this.maze[y][x] === 0) {
-                    this.openSingleBranch(x, y, random);
+                    this.openBranch(x, y, random);
                     break;
                 }
                 attempts++;
@@ -180,8 +156,8 @@ class MazeGenerator {
         }
     }
 
-    // فتح تفرع واحد فقط
-    openSingleBranch(x, y, random) {
+    // فتح تفرع
+    openBranch(x, y, random) {
         const directions = [
             { dx: 0, dy: -1 },
             { dx: 0, dy: 1 },
@@ -194,7 +170,6 @@ class MazeGenerator {
         const newY = y + dir.dy;
         
         if (this.isValidCell(newX, newY) && this.maze[newY][newX] === 1) {
-            // التحقق من أن الفتح لن يخلق مساحة مفتوحة
             const neighbors = this.getNeighbors(newX, newY);
             let pathCount = 0;
             
@@ -204,7 +179,6 @@ class MazeGenerator {
                 }
             }
             
-            // فتح الجدار فقط إذا كان محاطاً بممر واحد
             if (pathCount === 1) {
                 this.maze[newY][newX] = 0;
             }
@@ -212,25 +186,24 @@ class MazeGenerator {
     }
 
     // إيجاد الهدف في أبعد نقطة
-    findFarthestTarget(random) {
+    findTarget(random) {
         const distances = this.calculateDistances(this.playerPosition);
-        let candidates = [];
         let maxDistance = -1;
+        let candidates = [];
         
         for (let y = 1; y < this.height - 1; y++) {
             for (let x = 1; x < this.width - 1; x++) {
                 if (this.maze[y][x] === 0 && distances[y][x] > maxDistance) {
                     maxDistance = distances[y][x];
-                    candidates = [{ x: x, y: y, distance: distances[y][x] }];
+                    candidates = [{ x: x, y: y }];
                 } else if (this.maze[y][x] === 0 && distances[y][x] === maxDistance) {
-                    candidates.push({ x: x, y: y, distance: distances[y][x] });
+                    candidates.push({ x: x, y: y });
                 }
             }
         }
         
         if (candidates.length > 0) {
-            const selected = candidates[Math.floor(random() * candidates.length)];
-            return { x: selected.x, y: selected.y };
+            return candidates[Math.floor(random() * candidates.length)];
         }
         
         return { x: this.width - 2, y: this.height - 2 };
