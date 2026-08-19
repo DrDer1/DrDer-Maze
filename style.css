@@ -10,10 +10,10 @@
     --gold-primary: #f4c430;
     --gold-secondary: #ffd700;
     --gold-dark: #c9a227;
-    --wall-color: #2c3e50;
-    --path-color: #34495e;
+    --wall-color: #1a1a1a;
+    --path-color: #2c2c2c;
     --player-color: #ffd700;
-    --target-color: #f4c430;
+    --target-color: #ff4444;
     --border-color: #3a3a5c;
     --shadow-color: rgba(0, 0, 0, 0.3);
     --success-color: #4caf50;
@@ -175,7 +175,7 @@ body {
 
 .game-header {
     width: 100%;
-    padding: 12px 16px;
+    padding: 10px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -186,14 +186,14 @@ body {
 }
 
 .game-title-small {
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     font-weight: bold;
     color: var(--gold-primary);
     letter-spacing: 1px;
 }
 
 .stage-number {
-    font-size: 1rem;
+    font-size: 0.9rem;
     color: var(--text-secondary);
     font-weight: bold;
 }
@@ -204,7 +204,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 16px;
+    padding: 8px;
     overflow: hidden;
 }
 
@@ -222,7 +222,7 @@ body {
     display: grid;
     gap: 0;
     background-color: var(--wall-color);
-    border: 3px solid var(--gold-dark);
+    border: 2px solid var(--gold-dark);
     border-radius: 4px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     max-width: 100%;
@@ -237,7 +237,7 @@ body {
     height: 100%;
     min-width: 0;
     min-height: 0;
-    transition: background-color 0.1s ease;
+    transition: background-color 0.05s ease;
 }
 
 .maze-wall {
@@ -250,35 +250,39 @@ body {
 
 .maze-player {
     background-color: var(--player-color);
-    border-radius: 2px;
-    box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
-    animation: playerGlow 1.5s ease-in-out infinite;
+    border-radius: 50%;
+    box-shadow: 0 0 12px rgba(255, 215, 0, 0.9);
+    animation: playerGlow 1s ease-in-out infinite;
+    position: relative;
+    z-index: 5;
 }
 
 @keyframes playerGlow {
     0%, 100% {
-        box-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+        box-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
     }
     50% {
-        box-shadow: 0 0 16px rgba(255, 215, 0, 1);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 1);
     }
 }
 
 .maze-target {
     background-color: var(--target-color);
-    border-radius: 2px;
-    box-shadow: 0 0 12px rgba(244, 196, 48, 0.9);
-    animation: targetPulse 2s ease-in-out infinite;
+    border-radius: 50%;
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.9);
+    animation: targetPulse 1.5s ease-in-out infinite;
+    position: relative;
+    z-index: 4;
 }
 
 @keyframes targetPulse {
     0%, 100% {
         background-color: var(--target-color);
-        box-shadow: 0 0 8px rgba(244, 196, 48, 0.7);
+        box-shadow: 0 0 10px rgba(255, 68, 68, 0.7);
     }
     50% {
-        background-color: var(--gold-secondary);
-        box-shadow: 0 0 20px rgba(255, 215, 0, 1);
+        background-color: #ff6666;
+        box-shadow: 0 0 25px rgba(255, 68, 68, 1);
     }
 }
 
@@ -288,7 +292,7 @@ body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: rgba(0, 0, 0, 0.85);
+    background-color: rgba(0, 0, 0, 0.9);
     border: 2px solid var(--gold-primary);
     border-radius: 12px;
     padding: 32px;
@@ -413,11 +417,11 @@ body {
     }
     
     .game-title-small {
-        font-size: 1.1rem;
+        font-size: 1rem;
     }
     
     .stage-number {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
     }
     
     .btn {
@@ -427,7 +431,7 @@ body {
     }
     
     .game-area {
-        padding: 8px;
+        padding: 4px;
     }
 }
 
@@ -442,11 +446,11 @@ body {
     }
     
     .game-title-small {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
     
     .game-area {
-        padding: 4px;
+        padding: 2px;
     }
     
     .install-prompt {
@@ -466,19 +470,19 @@ body {
 /* ===== Landscape Orientation Support ===== */
 @media (orientation: landscape) and (max-height: 500px) {
     .game-header {
-        padding: 8px 12px;
+        padding: 6px 10px;
     }
     
     .game-title-small {
-        font-size: 0.9rem;
-    }
-    
-    .stage-number {
         font-size: 0.8rem;
     }
     
+    .stage-number {
+        font-size: 0.7rem;
+    }
+    
     .game-area {
-        padding: 4px;
+        padding: 2px;
     }
     
     .start-container {
