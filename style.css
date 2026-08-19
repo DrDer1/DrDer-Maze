@@ -11,7 +11,7 @@
     --gold-secondary: #ffd700;
     --gold-dark: #c9a227;
     --wall-color: #1a1a1a;
-    --path-color: #2c2c2c;
+    --path-color: #1a1a1a;
     --player-color: #ffd700;
     --target-color: #ff4444;
     --border-color: #3a3a5c;
@@ -237,7 +237,7 @@ body {
     height: 100%;
     min-width: 0;
     min-height: 0;
-    transition: background-color 0.05s ease;
+    transition: background-color 0.1s ease;
 }
 
 .maze-wall {
