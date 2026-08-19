@@ -222,7 +222,7 @@ class DrDerMazeApp {
         return this.mazeContainer.querySelector(`.maze-cell[data-x="${x}"][data-y="${y}"]`);
     }
 
-    // تحريك اللاعب - الاتجاهات الصحيحة
+    // تحريك اللاعب
     movePlayer(dx, dy) {
         if (!this.isGameActive) {
             return;
@@ -257,7 +257,7 @@ class DrDerMazeApp {
         this.loadStage(this.currentStage);
     }
 
-    // معالجة إدخال لوحة المفاتيح - الاتجاهات الصحيحة
+    // معالجة إدخال لوحة المفاتيح
     handleKeyboardInput(event) {
         if (!this.isGameActive) {
             return;
@@ -274,11 +274,11 @@ class DrDerMazeApp {
                 break;
             case 'ArrowLeft':
                 event.preventDefault();
-                this.movePlayer(-1, 0); // يسار - الاتجاه الصحيح
+                this.movePlayer(-1, 0); // يسار
                 break;
             case 'ArrowRight':
                 event.preventDefault();
-                this.movePlayer(1, 0); // يمين - الاتجاه الصحيح
+                this.movePlayer(1, 0); // يمين
                 break;
         }
     }
@@ -304,7 +304,7 @@ class DrDerMazeApp {
         event.preventDefault();
     }
 
-    // معالجة نهاية اللمس - الاتجاهات الصحيحة
+    // معالجة نهاية اللمس
     handleTouchEnd(event) {
         if (!this.isGameActive) {
             return;
@@ -321,20 +321,24 @@ class DrDerMazeApp {
             return;
         }
         
-        // تحديد اتجاه الحركة - الاتجاهات الصحيحة
+        // تحديد اتجاه الحركة
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             // حركة أفقية
             if (deltaX > 0) {
-                this.movePlayer(1, 0); // سحب لليمين = تحرك لليمين
+                // السحب من اليسار إلى اليمين = تحرك لليمين
+                this.movePlayer(1, 0);
             } else {
-                this.movePlayer(-1, 0); // سحب لليسار = تحرك لليسار
+                // السحب من اليمين إلى اليسار = تحرك لليسار
+                this.movePlayer(-1, 0);
             }
         } else {
             // حركة رأسية
             if (deltaY > 0) {
-                this.movePlayer(0, 1); // سحب للأسفل = تحرك للأسفل
+                // السحب من الأعلى إلى الأسفل = تحرك للأسفل
+                this.movePlayer(0, 1);
             } else {
-                this.movePlayer(0, -1); // سحب للأعلى = تحرك للأعلى
+                // السحب من الأسفل إلى الأعلى = تحرك للأعلى
+                this.movePlayer(0, -1);
             }
         }
     }
