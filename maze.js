@@ -1,4 +1,4 @@
-// ===== DrDer-Maze - Maze Generator =====
+// ===== DrDer-Maze - Maze Generator (Ultra Hard Version) =====
 
 class MazeGenerator {
     constructor() {
@@ -18,34 +18,37 @@ class MazeGenerator {
         };
     }
 
-    // تحديد حجم المتاهة بناءً على رقم المرحلة
+    // تحديد حجم المتاهة بناءً على رقم المرحلة - جميع المراحل صعبة
     getMazeSize(stageNumber) {
         let size;
         
-        if (stageNumber <= 10) {
-            // المراحل الأولى: متاهات صغيرة
-            size = 7;
-        } else if (stageNumber <= 30) {
-            // مراحل متوسطة: متاهات أكبر قليلاً
-            size = 9;
-        } else if (stageNumber <= 60) {
-            // مراحل متقدمة
+        if (stageNumber <= 5) {
+            // حتى المراحل الأولى صعبة
             size = 11;
-        } else if (stageNumber <= 100) {
-            // مراحل صعبة
-            size = 13;
-        } else if (stageNumber <= 200) {
-            // مراحل أكثر صعوبة
+        } else if (stageNumber <= 15) {
+            // مراحل أصعب
             size = 15;
-        } else if (stageNumber <= 500) {
-            // مراحل متقدمة جداً
-            size = 17;
-        } else if (stageNumber <= 1000) {
-            // مراحل الخبراء
+        } else if (stageNumber <= 30) {
+            // مراحل صعبة جداً
             size = 19;
-        } else {
+        } else if (stageNumber <= 50) {
+            // مراحل متقدمة
+            size = 23;
+        } else if (stageNumber <= 100) {
+            // مراحل الخبراء
+            size = 27;
+        } else if (stageNumber <= 200) {
+            // مراحل المحترفين
+            size = 31;
+        } else if (stageNumber <= 500) {
             // مراحل الأساطير
-            size = 21;
+            size = 35;
+        } else if (stageNumber <= 1000) {
+            // مراحل المستحيل
+            size = 39;
+        } else {
+            // مراحل التحدي الأقصى
+            size = 43;
         }
         
         // التأكد من أن الحجم فردي (مطلوب للمتاهة)
@@ -56,7 +59,7 @@ class MazeGenerator {
         return size;
     }
 
-    // توليد المتاهة باستخدام خوارزمية Recursive Backtracking
+    // توليد المتاهة باستخدام خوارزمية هجينة للصعوبة القصوى
     generateMaze(stageNumber) {
         const size = this.getMazeSize(stageNumber);
         this.width = size;
@@ -79,15 +82,18 @@ class MazeGenerator {
         const startY = 1;
         this.maze[startY][startX] = 0; // 0 = ممر
         
-        // استخدام خوارزمية Recursive Backtracking
+        // استخدام خوارزمية Recursive Backtracking مع تعديلات للصعوبة
         this.carvePassages(startX, startY, random);
         
-        // إضافة بعض التفرعات الإضافية للصعوبة
-        this.addExtraBranches(random);
+        // إضافة تفرعات كثيرة للصعوبة
+        this.addManyExtraBranches(random);
+        
+        // إزالة بعض الجدران لإنشاء طرق متعددة
+        this.createMultiplePaths(random);
         
         // تحديد مواقع اللاعب والهدف
         this.playerPosition = { x: 1, y: 1 };
-        this.targetPosition = this.findTargetPosition(random);
+        this.targetPosition = this.findHardTargetPosition(random);
         
         return {
             maze: this.maze,
@@ -99,7 +105,7 @@ class MazeGenerator {
         };
     }
 
-    // خوارزمية Recursive Backtracking لحفر الممرات
+    // خوارزمية Recursive Backtracking محسنة للصعوبة
     carvePassages(x, y, random) {
         const directions = [
             { dx: 0, dy: -2 }, // أعلى
@@ -108,7 +114,7 @@ class MazeGenerator {
             { dx: 2, dy: 0 }   // يمين
         ];
         
-        // خلط الاتجاهات
+        // خلط الاتجاهات بشكل عشوائي
         this.shuffleArray(directions, random);
         
         for (const dir of directions) {
@@ -126,20 +132,38 @@ class MazeGenerator {
         }
     }
 
-    // إضافة تفرعات إضافية لجعل المتاهة أكثر صعوبة
-    addExtraBranches(random) {
-        const extraBranches = Math.floor(this.width / 3);
+    // إضافة تفرعات كثيرة لزيادة الصعوبة
+    addManyExtraBranches(random) {
+        const extraBranches = Math.floor(this.width * 1.5);
         
         for (let i = 0; i < extraBranches; i++) {
-            // اختيار خلية عشوائية موجودة
+            let attempts = 0;
+            while (attempts < 100) {
+                const x = Math.floor(random() * (this.width - 2)) + 1;
+                const y = Math.floor(random() * (this.height - 2)) + 1;
+                
+                if (this.maze[y][x] === 0) {
+                    this.openExtraPassage(x, y, random);
+                    break;
+                }
+                attempts++;
+            }
+        }
+    }
+
+    // إنشاء طرق متعددة للوصول للهدف
+    createMultiplePaths(random) {
+        const extraPaths = Math.floor(this.width / 2);
+        
+        for (let i = 0; i < extraPaths; i++) {
             let attempts = 0;
             while (attempts < 50) {
                 const x = Math.floor(random() * (this.width - 2)) + 1;
                 const y = Math.floor(random() * (this.height - 2)) + 1;
                 
-                if (this.maze[y][x] === 0) {
-                    // فتح ممر إضافي
-                    this.openExtraPassage(x, y, random);
+                if (this.maze[y][x] === 1) {
+                    // فتح جدار لإنشاء طريق بديل
+                    this.maze[y][x] = 0;
                     break;
                 }
                 attempts++;
@@ -161,19 +185,19 @@ class MazeGenerator {
         const newY = y + dir.dy;
         
         if (this.isValidCell(newX, newY) && this.maze[newY][newX] === 0) {
-            // فتح الخلية بينهما
             this.maze[y + dir.dy / 2][x + dir.dx / 2] = 0;
         }
     }
 
-    // إيجاد موقع الهدف (أبعد نقطة عن البداية)
-    findTargetPosition(random) {
+    // إيجاد موقع الهدف (أبعد وأصعب نقطة)
+    findHardTargetPosition(random) {
         let maxDistance = -1;
         let bestPosition = { x: this.width - 2, y: this.height - 2 };
         
-        // البحث عن أبعد نقطة باستخدام BFS
+        // حساب المسافات من نقطة البداية
         const distances = this.calculateDistances(this.playerPosition);
         
+        // البحث عن أبعد نقطة
         for (let y = 1; y < this.height - 1; y++) {
             for (let x = 1; x < this.width - 1; x++) {
                 if (this.maze[y][x] === 0 && distances[y][x] > maxDistance) {
@@ -183,14 +207,15 @@ class MazeGenerator {
             }
         }
         
-        // إذا كانت المسافة قصيرة جداً، اختر نقطة أبعد
-        if (maxDistance < this.width) {
+        // إذا كانت المسافة قصيرة، اختر الزوايا البعيدة
+        if (maxDistance < this.width * 0.7) {
             const farPositions = [
                 { x: this.width - 2, y: this.height - 2 },
                 { x: 1, y: this.height - 2 },
                 { x: this.width - 2, y: 1 }
             ];
             
+            // اختيار أبعد زاوية
             for (const pos of farPositions) {
                 if (this.maze[pos.y][pos.x] === 0) {
                     const dist = distances[pos.y][pos.x];
@@ -200,9 +225,38 @@ class MazeGenerator {
                     }
                 }
             }
+            
+            // إذا لم تكن الزوايا بعيدة بما يكفي، ابحث عن نقطة معزولة
+            if (maxDistance < this.width * 0.5) {
+                bestPosition = this.findIsolatedPosition(random);
+            }
         }
         
         return bestPosition;
+    }
+
+    // إيجاد نقطة معزولة صعبة الوصول
+    findIsolatedPosition(random) {
+        const distances = this.calculateDistances(this.playerPosition);
+        let candidates = [];
+        
+        // جمع النقاط البعيدة
+        for (let y = 1; y < this.height - 1; y++) {
+            for (let x = 1; x < this.width - 1; x++) {
+                if (this.maze[y][x] === 0 && distances[y][x] > this.width * 0.6) {
+                    candidates.push({ x: x, y: y, distance: distances[y][x] });
+                }
+            }
+        }
+        
+        // اختيار نقطة عشوائية من النقاط البعيدة
+        if (candidates.length > 0) {
+            const selected = candidates[Math.floor(random() * candidates.length)];
+            return { x: selected.x, y: selected.y };
+        }
+        
+        // إذا لم توجد نقاط بعيدة، استخدم أبعد نقطة
+        return { x: this.width - 2, y: this.height - 2 };
     }
 
     // حساب المسافات من نقطة البداية
