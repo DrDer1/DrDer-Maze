@@ -222,7 +222,7 @@ class DrDerMazeApp {
         return this.mazeContainer.querySelector(`.maze-cell[data-x="${x}"][data-y="${y}"]`);
     }
 
-    // تحريك اللاعب - مع إصلاح الاتجاهات
+    // تحريك اللاعب - الاتجاهات الصحيحة
     movePlayer(dx, dy) {
         if (!this.isGameActive) {
             return;
@@ -257,7 +257,7 @@ class DrDerMazeApp {
         this.loadStage(this.currentStage);
     }
 
-    // معالجة إدخال لوحة المفاتيح - مع إصلاح الاتجاهات
+    // معالجة إدخال لوحة المفاتيح - الاتجاهات الصحيحة
     handleKeyboardInput(event) {
         if (!this.isGameActive) {
             return;
@@ -274,11 +274,11 @@ class DrDerMazeApp {
                 break;
             case 'ArrowLeft':
                 event.preventDefault();
-                this.movePlayer(1, 0); // يسار (معكوس للإصلاح)
+                this.movePlayer(-1, 0); // يسار - الاتجاه الصحيح
                 break;
             case 'ArrowRight':
                 event.preventDefault();
-                this.movePlayer(-1, 0); // يمين (معكوس للإصلاح)
+                this.movePlayer(1, 0); // يمين - الاتجاه الصحيح
                 break;
         }
     }
@@ -304,7 +304,7 @@ class DrDerMazeApp {
         event.preventDefault();
     }
 
-    // معالجة نهاية اللمس - مع إصلاح الاتجاهات
+    // معالجة نهاية اللمس - الاتجاهات الصحيحة
     handleTouchEnd(event) {
         if (!this.isGameActive) {
             return;
@@ -321,13 +321,13 @@ class DrDerMazeApp {
             return;
         }
         
-        // تحديد اتجاه الحركة - مع إصلاح الاتجاهات
+        // تحديد اتجاه الحركة - الاتجاهات الصحيحة
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             // حركة أفقية
             if (deltaX > 0) {
-                this.movePlayer(1, 0); // سحب لليمين = تحرك لليسار (معكوس)
+                this.movePlayer(1, 0); // سحب لليمين = تحرك لليمين
             } else {
-                this.movePlayer(-1, 0); // سحب لليسار = تحرك لليمين (معكوس)
+                this.movePlayer(-1, 0); // سحب لليسار = تحرك لليسار
             }
         } else {
             // حركة رأسية
@@ -342,11 +342,9 @@ class DrDerMazeApp {
     // إعداد دعم PWA للتثبيت
     setupPWAInstall() {
         window.addEventListener('beforeinstallprompt', (event) => {
-            // منع المتصفح من عرض نافذة التثبيت تلقائياً
             event.preventDefault();
             this.deferredPrompt = event;
             
-            // إظهار رسالة التثبيت إذا لم يكن التطبيق مثبتاً
             if (!this.isInstalled) {
                 this.showInstallPrompt();
             }
@@ -361,7 +359,6 @@ class DrDerMazeApp {
 
     // التحقق مما إذا كان التطبيق مثبتاً
     checkIfInstalled() {
-        // التحقق من وضع العرض
         const displayMode = window.matchMedia('(display-mode: standalone)').matches;
         const standaloneMode = window.navigator.standalone === true;
         
@@ -384,7 +381,6 @@ class DrDerMazeApp {
     async installApp() {
         if (this.deferredPrompt) {
             try {
-                // عرض نافذة التثبيت الأصلية
                 this.deferredPrompt.prompt();
                 const result = await this.deferredPrompt.userChoice;
                 
