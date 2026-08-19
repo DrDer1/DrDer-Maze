@@ -251,11 +251,11 @@ class DrDerMazeApp {
                 break;
             case 'ArrowLeft':
                 event.preventDefault();
-                this.movePlayer(1, 0); // معكوس
+                this.movePlayer(-1, 0); // معكوس
                 break;
             case 'ArrowRight':
                 event.preventDefault();
-                this.movePlayer(-1, 0); // معكوس
+                this.movePlayer(1, 0); // معكوس
                 break;
         }
     }
