@@ -8,26 +8,26 @@
     
     <title>DrDer-Maze</title>
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="manifest.json">
+    <!-- PWA Manifest - استخدام مسار نسبي -->
+    <link rel="manifest" href="./manifest.json">
     
-    <!-- App Icons -->
-    <link rel="icon" type="image/png" sizes="192x192" href="192.png">
-    <link rel="apple-touch-icon" href="192.png">
+    <!-- App Icons - استخدام مسارات نسبية -->
+    <link rel="icon" type="image/png" sizes="192x192" href="./192.png">
+    <link rel="apple-touch-icon" href="./192.png">
     
     <!-- Apple PWA Meta Tags -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="DrDer-Maze">
     
-    <!-- Main Stylesheet -->
-    <link rel="stylesheet" href="style.css">
+    <!-- Main Stylesheet - استخدام مسار نسبي -->
+    <link rel="stylesheet" href="./style.css">
 </head>
 <body>
     <!-- شاشة البداية -->
     <div id="startScreen" class="screen active">
         <div class="start-container">
-            <img src="192.png" alt="DrDer-Maze Logo" class="start-logo" width="120" height="120">
+            <img src="./192.png" alt="DrDer-Maze Logo" class="start-logo" width="120" height="120">
             <h1 class="game-title">DrDer-Maze</h1>
             <p class="game-description">آلاف المتاهات بانتظارك</p>
             <button id="startButton" class="btn btn-primary">ابدأ اللعب</button>
@@ -59,7 +59,7 @@
     <!-- رسالة تثبيت التطبيق -->
     <div id="installPrompt" class="install-prompt hidden">
         <div class="install-content">
-            <img src="192.png" alt="DrDer-Maze" class="install-icon" width="48" height="48">
+            <img src="./192.png" alt="DrDer-Maze" class="install-icon" width="48" height="48">
             <div class="install-text">
                 <h3>ثبّت DrDer-Maze</h3>
                 <p>العب بدون إنترنت وتجربة أفضل</p>
@@ -71,16 +71,16 @@
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="maze.js"></script>
-    <script src="storage.js"></script>
-    <script src="app.js"></script>
+    <!-- Scripts - استخدام مسارات نسبية -->
+    <script src="./maze.js"></script>
+    <script src="./storage.js"></script>
+    <script src="./app.js"></script>
     
-    <!-- Service Worker Registration -->
+    <!-- Service Worker Registration - استخدام مسار نسبي -->
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', function() {
-                navigator.serviceWorker.register('sw.js').then(function(registration) {
+                navigator.serviceWorker.register('./sw.js').then(function(registration) {
                     console.log('Service Worker registered with scope:', registration.scope);
                 }).catch(function(error) {
                     console.log('Service Worker registration failed:', error);
