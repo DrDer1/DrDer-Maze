@@ -300,20 +300,16 @@ class DrDerMazeApp {
         if (Math.abs(deltaX) > Math.abs(deltaY)) {
             // حركة أفقية
             if (deltaX > 0) {
-                // سحب لليمين = تحرك لليمين
-                this.movePlayer(1, 0);
+                this.movePlayer(1, 0); // يمين
             } else {
-                // سحب لليسار = تحرك لليسار
-                this.movePlayer(-1, 0);
+                this.movePlayer(-1, 0); // يسار
             }
         } else {
             // حركة رأسية
             if (deltaY > 0) {
-                // سحب للأسفل = تحرك للأسفل
-                this.movePlayer(0, 1);
+                this.movePlayer(0, 1); // أسفل
             } else {
-                // سحب للأعلى = تحرك للأعلى
-                this.movePlayer(0, -1);
+                this.movePlayer(0, -1); // أعلى
             }
         }
     }
